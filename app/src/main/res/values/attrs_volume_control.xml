@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="VolumeControl">
+        <attr name="value" format="float"/>
+        <attr name="actColor" format="color"/>
+        <attr name="inactColor" format="color"/>
+        <attr name="lines" format="integer"/>
+    </declare-styleable>
+</resources>
