@@ -34,6 +34,11 @@ class VolumeControl(
     var actColor: Int = DEFAULT_ACTIVE_COLOR
     var inactColor: Int = DEFAULT_INACTIVE_COLOR
 
+    private val vlRectCount: Int
+        get() = (linesCount / 100F * volValue).roundToInt()
+    private val lnRectCount: Int
+        get() = linesCount - vlRectCount
+
     var linesCount: Int = DEFAULT_LINES
         get() = field
         set(value) {
@@ -87,25 +92,10 @@ class VolumeControl(
     }
 
     override fun onDraw(canvas: Canvas) {
-        val vlRectCount = (linesCount / 100F * volValue).roundToInt()
-        val lnRectCount = linesCount - vlRectCount
-
+        //No allocations
         lineHeight = height / linesCount / 2
 
-        //Rect for inactive lines
-        lnRect.apply {
-            left = 0
-            top = 0
-            right = width
-            bottom = top + lineHeight
-        }
-        //Rect for active lines
-        vlRect.apply {
-            left = 0
-            top = 0
-            right = width
-            bottom = top + lineHeight
-        }
+        prepareRects()
 
         //Draw inactive lines
         for(a in 0 until lnRectCount) {
@@ -150,6 +140,23 @@ class VolumeControl(
         with(lnPaint) {
             color = inactColor
             style = Paint.Style.FILL
+        }
+    }
+
+    private fun prepareRects() {
+        //Rect for inactive lines
+        lnRect.apply {
+            left = 0
+            top = 0
+            right = width
+            bottom = top + lineHeight
+        }
+        //Rect for active lines
+        vlRect.apply {
+            left = 0
+            top = 0
+            right = width
+            bottom = top + lineHeight
         }
     }
 }
