@@ -2,7 +2,7 @@
     <string name="app_name">SportRadarSample</string>
     <string name="volume_hint">Volume</string>
     <string name="lines_hint">Lines</string>
-    <string name="value_volume_text">Volume set at %1$.2f%%</string>
+    <string name="value_volume_text">Volume set at %1$.0f%%</string>
     <string name="set_volume_bt">Set Volume</string>
     <string name="set_lines_bt">Set Lines</string>
     <string name="invalid_number_error">Error: Invalid value!</string>
