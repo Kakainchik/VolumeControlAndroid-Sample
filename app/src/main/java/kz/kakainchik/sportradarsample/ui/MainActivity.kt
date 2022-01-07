@@ -1,15 +1,19 @@
 package kz.kakainchik.sportradarsample.ui
 
-import androidx.appcompat.app.AppCompatActivity
+import android.media.AudioManager
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import kz.kakainchik.sportradarsample.R
+import kz.kakainchik.sportradarsample.ext.getVolumeFromPercent
 import kz.kakainchik.sportradarsample.ui.custom.VolumeControl
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var audio: AudioManager
+
     lateinit var volumeControl: VolumeControl
     lateinit var linesText: EditText
     lateinit var volumeText: EditText
@@ -18,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        audio = applicationContext.getSystemService(AUDIO_SERVICE) as AudioManager
 
         volumeControl = findViewById(R.id.volume_control)
         linesText = findViewById(R.id.lines_text)
@@ -29,6 +35,9 @@ class MainActivity : AppCompatActivity() {
 
         volumeControl.setOnVolumeChangeListener { v ->
             currentVolumeText.text = getString(R.string.value_volume_text, v)
+            audio.setStreamVolume(volumeControlStream,
+                audio.getVolumeFromPercent(v, volumeControlStream),
+                AudioManager.FLAG_SHOW_UI)
         }
 
         findViewById<MaterialButton>(R.id.lines_button).setOnClickListener {
@@ -44,6 +53,12 @@ class MainActivity : AppCompatActivity() {
                 volumeControl.volValue = num
             } else showToast(getText(R.string.invalid_number_error))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
     private fun showToast(text: CharSequence) {
